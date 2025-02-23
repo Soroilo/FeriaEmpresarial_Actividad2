@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestorStands {
-    private List<Stand> stands = new ArrayList<>();
+    private final List<Stand> stands = new ArrayList<>();
 
     public void agregarStand(Stand stand) {
         stands.add(stand);
@@ -24,5 +24,9 @@ public class GestorStands {
             }
         }
         return disponibles;
+    }
+
+    public Iterable<Stand> getStands() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -1,68 +1,54 @@
 package vista;
 
 import controlador.GestorVisitantes;
-import models.Visitante;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class VisitantesPanel extends JPanel {
-    private final GestorVisitantes gestor;
-    private JTable tablaVisitantes;
-    private JTextField txtNombre, txtIdentificacion, txtEmail;
-
-    public VisitantesPanel(GestorVisitantes gestor) {
-        this.gestor = gestor;
-        initUI();
+    public VisitantesPanel(GestorVisitantes gestorVisitantes) {
+        initComponents();
     }
 
-    private void initUI() {
+    private void initComponents() {
         setLayout(new BorderLayout(10, 10));
 
-        // Formulario
-        JPanel formPanel = new JPanel(new GridLayout(3, 2, 5, 5));
-        txtNombre = new JTextField();
-        txtIdentificacion = new JTextField();
-        txtEmail = new JTextField();
+        // Formulario con GridBagLayout (para mayor control)
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5); // Márgenes
 
-        formPanel.add(new JLabel("Nombre:"));
-        formPanel.add(txtNombre);
-        formPanel.add(new JLabel("Identificación:"));
-        formPanel.add(txtIdentificacion);
-        formPanel.add(new JLabel("Email:"));
-        formPanel.add(txtEmail);
+        JTextField txtNombre = new JTextField(20);
+        JTextField txtIdentificacion = new JTextField(15);
+        JTextField txtEmail = new JTextField(20);
 
-        // Botón
-        JButton btnGuardar = new JButton("Guardar");
-        btnGuardar.addActionListener(this::guardarVisitante);
+        // Primera fila
+        gbc.gridx = 0; gbc.gridy = 0;
+        formPanel.add(new JLabel("Nombre:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtNombre, gbc);
 
-        // Tabla
-        tablaVisitantes = new JTable();
+        // Segunda fila
+        gbc.gridx = 0; gbc.gridy = 1;
+        formPanel.add(new JLabel("Identificación:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtIdentificacion, gbc);
+
+        // Tercera fila
+        gbc.gridx = 0; gbc.gridy = 2;
+        formPanel.add(new JLabel("Email:"), gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtEmail, gbc);
+
+        // Botón "Guardar"
+        JButton btnGuardar = new JButton("Guardar Visitante");
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        formPanel.add(btnGuardar, gbc);
+
+        // Tabla de visitantes
+        JTable tablaVisitantes = new JTable();
         JScrollPane scrollPane = new JScrollPane(tablaVisitantes);
 
         add(formPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
-        add(btnGuardar, BorderLayout.SOUTH);
-
-        actualizarTabla();
-    }
-
-    private void guardarVisitante() {
-        Visitante visitante = new Visitante(
-            txtNombre.getText(),
-            txtIdentificacion.getText(),
-            txtEmail.getText()
-        );
-        gestor.agregarVisitante(visitante);
-        actualizarTabla();
-    }
-
-    private void actualizarTabla() {
-        DefaultTableModel model = new DefaultTableModel(new Object[]{"Nombre", "Identificación", "Email"}, 0);
-        for (Visitante visitante : gestor.getVisitantes()) {
-            model.addRow(new Object[]{visitante.getNombre(), visitante.getIdentificacion(), visitante.getEmail()});
-        }
-        tablaVisitantes.setModel(model);
     }
 }
